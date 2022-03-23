@@ -15,7 +15,7 @@ app.use(fileUplaod())
 dotenv.config();
 
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect('mongodb://localhost:27017/myapp')
     .then(() => {
         console.log("DB connection successful!")
     })

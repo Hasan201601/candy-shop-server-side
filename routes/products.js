@@ -37,6 +37,20 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
     }
 })
 
+//update stock
+router.put("/find/:id", async (req, res) => {
+    const stock = req.body.stock
+    console.log(req.body);
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+            $set: { stock }
+        }, { new: true })
+        res.status(200).json(updatedProduct);
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
 // UPDATE
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     /*  const encodeToBuffer = (pic) => {
@@ -121,8 +135,9 @@ router.get("/latest", async (req, res) => {
 
 // Find Product by Category
 router.get("/:category", async (req, res) => {
+    console.log(req.params.category);
     try {
-        const productsByCategory = await Product.find({ category: req.body.category });
+        const productsByCategory = await Product.find({ category: req.params.category });
         res.status(200).json(productsByCategory)
     } catch (err) {
         res.status(500).json(err)

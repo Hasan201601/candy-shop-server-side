@@ -4,16 +4,15 @@ const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = requir
 
 const router = require("express").Router();
 
-router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
-    if (req.body.password) {
-        req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SEC).toString()
-    }
+router.put("/:id", async (req, res) => {
+    console.log("showing", req.body);
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, {
             $set: req.body
-        }, { new: true })
+        }, { upsert: true, strict: false })
         res.status(200).json(updatedUser);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err)
     }
 })
@@ -43,10 +42,10 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 // GET All Users
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
     try {
-        const query = req.query.new;
-        const users = query ? await User.find().sort({ _id: -1 }).limit(5) : await User.find()
+        const users = await User.find()
         res.status(200).json(users);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err)
     }
 })
