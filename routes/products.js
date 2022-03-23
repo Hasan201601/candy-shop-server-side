@@ -70,6 +70,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
          ...images,
          ...req.body
      } */
+    const updatedData = req.body
 
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
@@ -106,6 +107,14 @@ router.get("/find/:id", async (req, res) => {
 router.get("/mystery", async (req, res) => {
     try {
         const mysteryBox = await Product.find({ mysterybox: true })
+        res.status(200).json(mysteryBox);
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+router.get("/mystery/recent", async (req, res) => {
+    try {
+        const mysteryBox = await Product.find({ mysterybox: true }).limit(3)
         res.status(200).json(mysteryBox);
     } catch (err) {
         res.status(500).json(err)
