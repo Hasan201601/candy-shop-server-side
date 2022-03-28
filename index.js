@@ -15,12 +15,13 @@ app.use(fileUplaod())
 dotenv.config();
 
 
-mongoose.connect('mongodb://localhost:27017/myapp')
+mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         console.log("DB connection successful!")
     })
     .catch(err => {
         console.log(err)
+        process.exit(0)
     })
 app.use(express.json());
 app.use("/api/auth", authRoute)
@@ -30,7 +31,9 @@ app.use("/api/orders", orderRoutes)
 app.use("/api/categories", categoryRoute)
 app.use("/api/payment", paymentRoute)
 
-
+app.get("/", (req, res) => {
+    res.send("hello")
+})
 app.listen(process.env.PORT || 5000, () => {
     console.log("backend server is running!")
 })
