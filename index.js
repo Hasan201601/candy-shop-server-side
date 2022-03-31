@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URL)
     })
     .catch(err => {
         console.log(err)
-        process.exit(0)
+        process.exit(1)
     })
 app.use(express.json());
 app.use("/api/auth", authRoute)
